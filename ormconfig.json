@@ -1,0 +1,24 @@
+{
+  "type": "mssql",
+  "host": "localhost",
+  "port": 1433,
+  "username": "SA",
+  "password": "Unicef1991",
+  "database": "TutorialDB",
+  "synchronize": false,
+  "logging": false,
+  "entities": [
+     "src/**/**.entity{.ts,.js}"
+   ],
+  "migrations": [
+     "src/migration/**/*.ts"
+  ],
+  "subscribers": [
+     "src/subscriber/**/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "src/migration",
+    "entitiesDir": "src/entity",
+    "subscribersDir": "src/subscriber"
+  }
+}
