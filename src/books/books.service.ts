@@ -7,7 +7,9 @@ import { AuthorsService } from '../authors/authors.service';
 import { getConnection } from "typeorm";
 import { AuthorDto } from '../authorDto/authorDto';
 import { BookDto } from '../bookDto/bookDto';
-// import { AppLoggerService } from '../logger/logger.service'
+import { AppLoggerService } from '../logger/logger.service';
+import { LoggerFileConfigurator } from '../logger/logger-file-configurator';
+
 
 @Injectable()
 export class BooksService {
@@ -16,19 +18,20 @@ export class BooksService {
     @InjectRepository(Book)
     private booksRepository: Repository<Book>,
     private authorService: AuthorsService,
-    // private loggerService: AppLoggerService
-
-  ) { }
+    private loggerService: AppLoggerService,
+    private loggerFileConfigurator: LoggerFileConfigurator
+  ) {
+    
+    // print some test info
+    this.loggerService.setConfig(this.loggerFileConfigurator).info("!!!&!&!&&&&&&!test mesage from bookController it write LOGS only to console!!!!")
+  }
 
   async getAllBooks(): Promise<Book[]> {
-  // await this.loggerService.error('some text with Error');
-
     return this.booksRepository.find();
   }
 
   async getBookById(id: number): Promise<Book> {
-    // await this.loggerService.info(`ID in params url === '${id}'`);
-     return this.booksRepository.findOne(id);
+    return this.booksRepository.findOne(id);
 
   }
 
@@ -41,8 +44,6 @@ export class BooksService {
   }
 
   async createBook(book: BookDto): Promise<Book> {
-    // await this.loggerService.info(JSON.stringify(`${book}`));
-
     return this.booksRepository.save(book);
   }
 

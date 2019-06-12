@@ -1,31 +1,29 @@
 import { Controller, Post, Body, Get, Patch, Delete, Param, Inject } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { Book } from './book.entity';
-// import { Author } from '../authors/author.entity';
 import { AuthorDto } from '../authorDto/authorDto';
 import { BookDto } from '../bookDto/bookDto';
 import { AppLoggerService } from '../logger/logger.service';
-// import * as winston from 'winston';
+import { LoggerConsoleConfigurator } from '../logger/logger-console-configurator';
 
 @Controller('books')
 export class BooksController {
-
     constructor(
-    private bookService: BooksService,
-    private loggerService: AppLoggerService
-    ) { }
+        private bookService: BooksService,
+        private loggerService: AppLoggerService,
+        private loggerConsoleConfigurator: LoggerConsoleConfigurator
+    ) {
+        // print some test info
+        this.loggerService.setConfig(this.loggerConsoleConfigurator).info("!!!!test mesage from bookController it write LOGS only to console!!!!")
+    }
 
     @Get('authors')
     async getAllBooksWithAuth() {
-        
-        // console.log(logger)
-    // await this.loggerService.info();
         return await this.bookService.getAllBooksWithAllRelatedAuthors();
     }
 
     @Get(':id/authors')
     async getOneBookWithAuths(@Param('id') id: number) {
-        // await this.loggerService.warn();
         return await this.bookService.getBookByIdWithAllRelatedAuthors(id);
     }
 

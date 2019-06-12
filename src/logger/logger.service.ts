@@ -1,83 +1,20 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { Logger } from 'winston';
+import { Injectable, Global } from '@nestjs/common';
 import { Level } from '../constants/levelConstants';
-import { Direction } from '../constants/fromEntity';
+import { LoggerConfiguratorInterface } from '../logger/logger-interface';
 import * as winston from 'winston';
-// import { WinstonModule } from 'nest-winston';
-// const { format } = require('winston');
 
-// const console = winston.transports.Console();
-
-
-// @Injectable()
-
+@Global()
+@Injectable()
 export class AppLoggerService {
-
-    constructor(
-        @Inject('winston')
-        private readonly winston: Logger
-        // private readonly options : {
-        //     out: ['console', 'file']
-        // }
-    ) {    
-        //  new winston.transports.Console();
-        //  new winston.transports.File({ filename: 'combined.log' })
-       }
-
-
-
-    // async error(message) {
-    //     this.winston.log({
-    //         level: `${Level.levelError}`,
-    //         message: `${message}`,
-    //     } );
-    // }
-
-    async info(message, option) {
-        const opt = {
-            // ...this.options,
-            ...option
+    
+    setConfig(configurator: LoggerConfiguratorInterface) {
+        const config = configurator.getConfig();
+        const loggerr = winston.createLogger(config as winston.LoggerOptions)
+        return {
+            info(message) {
+                loggerr.log(`${Level.levelInfo}`, `${message}`)
+            }
         }
-        this.winston.log({
-            level: `${Level.levelInfo}`,
-            message: `${message}`,
-            option: opt
-        });
     }
 
-    // async debug(message) {
-    //     this.winston.log({
-    //         level: `${Level.levelDebug}`,
-    //         message: `${message}`,
-
-    //     });
-    // }
-
-    // async warn(message) {
-    //     this.winston.log({
-    //         level: `${Level.levelWarn}`,
-    //         message: `${message}`,
-    //     });
-    // }
-
-    // async buildLogger(Direction, option) {
-    //     return {
-    //         info(message)
-
-    //     }
-
-
-    // }
 }
-
-
-
-
-
-
-
-
-// => this.error(message, { Direction,
-//     ...this.options,
-//     ...option
-//     })
