@@ -21,13 +21,15 @@ export class BooksService {
     private loggerService: AppLoggerService,
     private loggerFileConfigurator: LoggerFileConfigurator
   ) {
-    
-    // print some test info
-    this.loggerService.setConfig(this.loggerFileConfigurator).info("!!!&!&!&&&&&&!test mesage from bookController it write LOGS only to console!!!!")
+
+    // configure Logger
+    // this.loggerService.setConfig(this.loggerFileConfigurator)
   }
 
   async getAllBooks(): Promise<Book[]> {
-    return this.booksRepository.find();
+     const books = await this.booksRepository.find();
+    //  this.loggerService.log(JSON.stringify(books))
+     return books;
   }
 
   async getBookById(id: number): Promise<Book> {

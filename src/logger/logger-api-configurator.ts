@@ -1,7 +1,7 @@
 import * as winston from 'winston';
 import { LoggerConfiguratorInterface } from './logger-interface'
 
-export class LoggerFileConfigurator implements LoggerConfiguratorInterface {
+export class LoggerApiConfigurator implements LoggerConfiguratorInterface {
 
     public getConfig() {
         return {
@@ -11,14 +11,13 @@ export class LoggerFileConfigurator implements LoggerConfiguratorInterface {
                 winston.format.align(),
                 winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
             ),
-            transports: [
-                new winston.transports.File({ filename: 'combined.log' })
-            ]
-        }
+            transports: [new winston.transports.Console(),
+                new winston.transports.Http({ host: 'localhost', port:8080 })]   
+                }
     }
 
     public getName() {
-        return 'LoggerFileConfigurator'
+        return 'LoggerApiConfigurator'
     }
 
 }

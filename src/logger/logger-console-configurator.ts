@@ -15,5 +15,9 @@ export class LoggerConsoleConfigurator implements LoggerConfiguratorInterface {
             transports: [new winston.transports.Console()]
         }
     }
+
+    public getName() {
+        return 'LoggerConsoleConfigurator'
+    }
 }
 

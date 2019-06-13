@@ -6,15 +6,24 @@ import * as winston from 'winston';
 @Global()
 @Injectable()
 export class AppLoggerService {
+    private logger;
     
+    constructor() {
+        this.logger = winston.createLogger()
+        console.log('AppLoggerService constructor')
+    }
+
     setConfig(configurator: LoggerConfiguratorInterface) {
+        console.log('AppLoggerService setConfig', configurator.getName())
+
         const config = configurator.getConfig();
-        const loggerr = winston.createLogger(config as winston.LoggerOptions)
-        return {
-            info(message) {
-                loggerr.log(`${Level.levelInfo}`, `${message}`)
-            }
-        }
+        this.logger.configure(config);
+        
+    }
+
+    log(message) {
+        this.logger.log(`${Level.levelInfo}`, `${message}`)
+        console.log('AppLoggerService log')
     }
 
 }

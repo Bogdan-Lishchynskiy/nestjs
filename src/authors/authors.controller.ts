@@ -2,12 +2,25 @@ import { Controller, Post, Body, Get, Delete, Param, Patch } from '@nestjs/commo
 import { AuthorsService } from './authors.service';
 import { Author } from './author.entity';
 import { AuthorDto } from '../authorDto/authorDto';
+// import { AppLoggerService } from '../logger/logger.service';
+import { LoggerFileConfigurator } from '../logger/logger-file-configurator';
+import { LoggerFactory } from '../logger/logger-factory';
 
 
 @Controller('authors')
 export class AuthorsController {
+    private loggerService;
 
-    constructor(private authorService: AuthorsService) { }
+
+    constructor(
+        private authorService: AuthorsService,
+        private loggerFileConfigurator: LoggerFileConfigurator,
+        private loggerFactory: LoggerFactory
+    ) {
+       
+        // get configured Logger
+        this.loggerService = this.loggerFactory.getLogger(this.loggerFileConfigurator);
+    }
 
     @Patch(':id')
     async update(@Param('id') id: number, @Body() author: Author) {
@@ -26,7 +39,9 @@ export class AuthorsController {
 
     @Get()
     async get() {
-        return this.authorService.getAllAuthors();
+        const authors = await this.authorService.getAllAuthors();
+        this.loggerService.log(JSON.stringify(authors))
+        return authors;
     }
 
     @Post()
@@ -45,3 +60,9 @@ export class AuthorsController {
     }
 
 }
+
+
+
+
+
+

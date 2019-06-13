@@ -15,7 +15,8 @@ import { AppLoggerModule } from '../logger/logger.module'
     AppLoggerModule
   ],
   providers: [BooksService],
-  controllers: [BooksController]
+  controllers: [BooksController],
+  exports:[BooksService]
 })
 
 export class BooksModule { }

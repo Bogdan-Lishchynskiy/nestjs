@@ -3,18 +3,21 @@ import { BooksService } from './books.service';
 import { Book } from './book.entity';
 import { AuthorDto } from '../authorDto/authorDto';
 import { BookDto } from '../bookDto/bookDto';
-import { AppLoggerService } from '../logger/logger.service';
+import { LoggerFactory } from '../logger/logger-factory';
+
 import { LoggerConsoleConfigurator } from '../logger/logger-console-configurator';
 
 @Controller('books')
 export class BooksController {
+    private loggerService;
+    
     constructor(
         private bookService: BooksService,
-        private loggerService: AppLoggerService,
-        private loggerConsoleConfigurator: LoggerConsoleConfigurator
+        private loggerConsoleConfigurator: LoggerConsoleConfigurator,
+        private loggerFactory: LoggerFactory
     ) {
-        // print some test info
-        this.loggerService.setConfig(this.loggerConsoleConfigurator).info("!!!!test mesage from bookController it write LOGS only to console!!!!")
+        // get configured Logger
+        this.loggerService = this.loggerFactory.getLogger(this.loggerConsoleConfigurator);
     }
 
     @Get('authors')
@@ -39,7 +42,9 @@ export class BooksController {
 
     @Get()
     async get() {
-        return this.bookService.getAllBooks();
+        const allBooks = await this.bookService.getAllBooks();
+        this.loggerService.log(JSON.stringify(allBooks))
+        return allBooks;
     }
 
     @Get(':id')
